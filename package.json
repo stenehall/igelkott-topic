@@ -1,0 +1,19 @@
+{
+  "name": "igelkott-topic",
+  "description": "Topic plugin for Igelkott",
+  "version": "0.1.0",
+  "main": "igelkott-topic.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "chai": "~1.4.2",
+    "mocha": "1.3.x",
+    "underscore": "*",
+    "parse": "*",
+    "sinon": "*",
+    "igelkott": "*"
+  },
+  "scripts": {
+    "test": "mocha -R spec --recursive"
+  }
+}
