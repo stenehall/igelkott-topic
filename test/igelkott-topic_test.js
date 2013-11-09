@@ -49,7 +49,7 @@ describe('Topic', function() {
 
   it('Should allow users to add suggestions', function(done) {
 
-    this.timeout(50000); // DB queries are slow
+    this.timeout(5000); // DB queries are slow
     igelkott.plugin.load('topic', Topic);
 
     s.on('data', function(data) {
@@ -68,13 +68,35 @@ describe('Topic', function() {
 
   it('Should return created suggestions', function(done) {
 
-    this.timeout(50000); // DB queries are slow
+    this.timeout(5000); // DB queries are slow
     igelkott.plugin.load('topic', Topic);
 
     s.on('data', function(data) {
       if(data == "PRIVMSG ##botbotbot :dsmith grymt! Tack för förslaget (this is a suggestion)\r\n")
       {
         s.write(":dsmith!~dsmith@unaffiliated/dsmith PRIVMSG ##botbotbot :!topic today\r\n");
+      }
+      else if (data == "PRIVMSG ##botbotbot :dsmith dagens förslag: this is a suggestion (dsmith)\r\n")
+      {
+        done();
+      }
+    });
+
+    cleanParseClass(igelkott, 'topic', function() {
+      igelkott.connect();
+      s.write(":dsmith!~dsmith@unaffiliated/dsmith PRIVMSG ##botbotbot :!topic this is a suggestion\r\n");
+    });
+  });
+
+    it('Should handle empty trigger as asking for todays suggestions', function(done) {
+
+    this.timeout(5000); // DB queries are slow
+    igelkott.plugin.load('topic', Topic);
+
+    s.on('data', function(data) {
+      if(data == "PRIVMSG ##botbotbot :dsmith grymt! Tack för förslaget (this is a suggestion)\r\n")
+      {
+        s.write(":dsmith!~dsmith@unaffiliated/dsmith PRIVMSG ##botbotbot :!topic\r\n");
       }
       else if (data == "PRIVMSG ##botbotbot :dsmith dagens förslag: this is a suggestion (dsmith)\r\n")
       {

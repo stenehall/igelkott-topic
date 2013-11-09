@@ -19,7 +19,7 @@ var Topic = function Topic() {
 
 Topic.prototype.topic = function topic(message) {
   var parts = message.parameters[1].split(' ');
-  if (parts[1] == 'today')
+  if (parts[1] == 'today' || parts.length === 1)
   {
     this.list(message);
   }
@@ -53,8 +53,13 @@ Topic.prototype.list = function list(message) {
   var Karma_data = this.igelkott.db.Object.extend("topic");
   var query = new this.igelkott.db.Query(Karma_data);
 
+
+  function padDate(n) {
+    return n < 10 ? '0' + n : n;
+  }
+
   var d = new Date();
-  var strToday = d.getFullYear()+'-'+d.getMonth()+'-'+(d.getDate() < 10 ? '0'+d.getDate() : d.getDate());
+  var strToday = d.getFullYear()+'-'+padDate(d.getMonth()+1)+'-'+padDate(d.getDate())+' 00:00';
   var date = new Date(strToday);
 
   query.greaterThan("createdAt", date);
