@@ -36,7 +36,7 @@ describe('Topic', function() {
     s = new Stream.PassThrough({objectMode: true});
 
     config = {
-      plugins:['privmsg'],
+      core:['privmsg'],
       'adapter': s, 'connect': function() { this.server.emit('connect'); },
       "database": {
         "app_id": process.env.APP_ID,
@@ -50,7 +50,7 @@ describe('Topic', function() {
   it('Should allow users to add suggestions', function(done) {
 
     this.timeout(5000); // DB queries are slow
-    igelkott.plugin.load('topic', Topic);
+    igelkott.plugin.load('topic', {}, Topic);
 
     s.on('data', function(data) {
       if(data == "PRIVMSG ##botbotbot :dsmith grymt! Tack för förslaget (this is a suggestion)\r\n")
@@ -69,7 +69,7 @@ describe('Topic', function() {
   it('Should return created suggestions', function(done) {
 
     this.timeout(5000); // DB queries are slow
-    igelkott.plugin.load('topic', Topic);
+    igelkott.plugin.load('topic', {}, Topic);
 
     s.on('data', function(data) {
       if(data == "PRIVMSG ##botbotbot :dsmith grymt! Tack för förslaget (this is a suggestion)\r\n")
@@ -91,7 +91,7 @@ describe('Topic', function() {
     it('Should handle empty trigger as asking for todays suggestions', function(done) {
 
     this.timeout(5000); // DB queries are slow
-    igelkott.plugin.load('topic', Topic);
+    igelkott.plugin.load('topic', {}, Topic);
 
     s.on('data', function(data) {
       if(data == "PRIVMSG ##botbotbot :dsmith grymt! Tack för förslaget (this is a suggestion)\r\n")
