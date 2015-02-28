@@ -1,7 +1,7 @@
 var Topic = function Topic() {
 
   this.listeners = {'trigger:topic': this.topic, 'trigger:shownamn': this.topic};
-  this.requireDB = true;
+  this.require = ['parse'];
 
   this.throttleProtection = {};
 
@@ -19,12 +19,9 @@ var Topic = function Topic() {
 
 Topic.prototype.topic = function topic(message) {
   var parts = message.parameters[1].split(' ');
-  if (parts[1] == 'today' || parts.length === 1)
-  {
+  if (parts[1] == 'today' || parts.length === 1) {
     this.list(message);
-  }
-  else
-  {
+  } else {
     parts.shift();
     message.parameters[1] = parts.join(' ');
     this.add(message);
@@ -50,9 +47,8 @@ Topic.prototype.add = function add(message) {
 
 Topic.prototype.list = function list(message) {
 
-  var Karma_data = this.igelkott.db.Object.extend("topic");
-  var query = new this.igelkott.db.Query(Karma_data);
-
+  var Karma_data = this.igelkott.parse.Object.extend("topic");
+  var query = new this.igelkott.parse.Query(Karma_data);
 
   function padDate(n) {
     return n < 10 ? '0' + n : n;
@@ -73,8 +69,7 @@ Topic.prototype.list = function list(message) {
 
       var buffer = message.prefix.nick+' dagens förslag: '+topics.join(', ');
       var msg;
-      while (buffer.length > 0)
-      {
+      while (buffer.length > 0) {
         msg = buffer.slice(0,400); // @TODO: Figure out correct length here
         buffer = buffer.slice(400);
 
@@ -89,7 +84,7 @@ Topic.prototype.list = function list(message) {
 };
 
 Topic.prototype.addRecord = function addRecord(obj, callback) {
-  var Topic = this.igelkott.db.Object.extend("topic");
+  var Topic = this.igelkott.parse.Object.extend("topic");
   new Topic().save(obj).then(function(trans) {
     this.igelkott.log('New object created with objectId: ' + trans.id);
     callback();
@@ -99,3 +94,4 @@ Topic.prototype.addRecord = function addRecord(obj, callback) {
 };
 
 exports.Plugin = Topic;
+
